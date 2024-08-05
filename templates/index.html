@@ -5,12 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
 
+    <script>
+        async function onOff() {
+            const response = await fetch('/onOff', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ valor: 'ok' })
+            });
+            console.log("logg")
+            const data = await response.json();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const select = document.getElementById('onOff');
+            button.addEventListener('click', (event) => {
+                onOff();
+            });
+        });
+    </script>
 </head>
 
 <body>
-    <h1>Monitor de ações</h1>
+    <button id="onOff">on off</button> <h1>Monitor de ações</h1>
     <div id="principal">
         <div class="sessao1">
             <h3>Atualizações</h3>
@@ -41,7 +62,7 @@
         <div class="sessao2">
             <ul>
                 <li><a href="">Suas ações</a></li>
-                <li><a href="">Histórico</a></li>
+                <li><a href="historico">Histórico</a></li>
                 <li><a href="">Notificações</a></li>
                 <li><a href="">Configurações</a></li>
                 <li><a href="">Sobre</a></li>

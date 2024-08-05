@@ -51,6 +51,14 @@ h3{
     min-height: 270px;
 }
 
+#onOff{
+    padding: 15px;
+    background-color: red;
+    border: 2px solid rebeccapurple;
+}
+select{
+    padding: 2px;
+}
 @media(max-width: 1250px){
     .divBloco{
         grid-template-columns: 37vw 37vw;
