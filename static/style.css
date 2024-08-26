@@ -5,6 +5,7 @@
     --bg-color: #f8f8ff;
     --div-border: #f5f5f5;
     --bg-shadow: #778899;
+    --bg-msg: #d4eef8;
 }
 
 body *{font-family: monospace; color: var(--font-color);}
@@ -58,6 +59,35 @@ h3{
 }
 select{
     padding: 2px;
+}
+.msg{
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--bg-msg);
+    margin-top: 8px;
+}
+form{
+    margin-bottom: 12px ;
+}
+input{
+    padding: 4px;
+}
+
+#tabela .itemTab{
+    background-color: rgb(221, 221, 221);
+    border-radius: 6px;
+    width: 65vw;
+    padding: 6px;
+}
+#tabela thead{
+    background-color: rgb(176, 176, 176);
+}
+.botaoExcluir{
+    border-radius: 6px;
+    padding: 6px;
+    background-color: #bf0425;
+    font-size: 11pt;
+    font-weight: bold;
 }
 @media(max-width: 1250px){
     .divBloco{

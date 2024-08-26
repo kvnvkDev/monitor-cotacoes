@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+
+    <script>
+        // function submit(){
+        window.addEventListener('DOMContentLoaded', function () {
+            const tdElements = document.querySelectorAll('#tabela td');
+
+            tdElements.forEach(td => {
+                td.addEventListener('mousedown', function (event) {
+                    const idLink = event.target.id;
+                    console.log(idLink);
+                    let req = new XMLHttpRequest()
+                    req.open("POST", "deleteAcoes/" + idLink, true)
+                    req.setRequestHeader("Content-Type", "application/json")
+                    req.send(this.id)
+                    alert(idLink);
+                });
+            });
+        });
+        /*  id =  document.querySelectorAll('#tabela td');
+          id.forEach( linha => {linha.addEventListener('click', function(event){
+           const link= event.target.closest('tr');
+           const idLink = link.id;
+           console.log(idLink);
+           alert(idLink);
+          });
+       });
+          /*id.forEach(function(td){
+               td.addEventListener("click", function(event){
+                   alert(event.id)
+                   console.log(event.id)
+               })
+           });
+           console.log(id)
+           let req = new XMLHttpRequest()
+           req.open("POST" , "deleteAcoes/" + this.id, true)
+           req.setRequestHeader("Content-Type","application/json")
+           req.send(this.id)
+       }
+
+       document.addEventListener('submit', (event) => {
+*/
+        //   }
+    </script>
+</head>
+
+<body>
+    <a href="/">
+        <h1>Monitor de ações</h1>
+    </a>
+    <div id="principal">
+        <div class="sessao1">
+            <h3>Suas ações</h3>
+            <form id="formAdd" action="addAcoes" method="post">
+                <label>Adicionar novo ativo </label>
+                <input type="text" name="ticker">
+                <input type="submit" value="Adicionar">
+                <br>
+                <p class="msg">&#9888 Este aplicativo usa dados extraidos do yfinance. O nome dos tickers adicionados devem
+                    seguir a nomenclatura do <a href="https://br.financas.yahoo.com/" target="_blank">Yahoo
+                        Finance</a>.</p>
+                <br>
+                {% if status != "" : %}
+                <p class="msg">{{ status }}</p>
+                {% endif %}
+            </form>
+            <table id="tabela">
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>Controle</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in tickers %}
+                    <tr>
+                        <td th:text="{{ item }}"class="itemTab">{{ item }}</td>
+                        <td id="{{ item }}" class="botaoExcluir">&#128465 excluir</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>...</p>
+        </div>
+        <div class="sessao2">
+            <ul>
+                <li><a href="listaAcoes">Suas ações</a></li>
+                <li><a href="historico">Histórico</a></li>
+                <li><a href="">Notificações</a></li>
+                <li><a href="">Configurações</a></li>
+                <li><a href="">Sobre</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

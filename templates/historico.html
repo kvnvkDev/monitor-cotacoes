@@ -27,20 +27,16 @@
             
         }
 
-        // Chame a função para preencher o select quando a página carregar
-        //document.addEventListener('DOMContentLoaded', preencherSelect);
-
         // Envia o valor seleciona para gera o gráfico
         async function enviarValor(valor) {
             console.log(valor)
-            const response = await fetch('/executar_script', {
+            const response = await fetch('/gerarGrafico', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ valor: valor })
             });
-            console.log("logg")
             const data = await response.json();
             const img = document.getElementById('grafico');
             img.src = 'data:image/png;base64,' + data.image;
@@ -61,7 +57,7 @@
 </head>
 
 <body>
-    <h1>Monitor de ações</h1>
+    <a href="/"><h1>Monitor de ações</h1></a>
     <div id="principal">
         <div class="sessao1">
             <h3>Histórico</h3>
@@ -76,7 +72,7 @@
         </div>
         <div class="sessao2">
             <ul>
-                <li><a href="">Suas ações</a></li>
+                <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
                 <li><a href="">Notificações</a></li>
                 <li><a href="">Configurações</a></li>
