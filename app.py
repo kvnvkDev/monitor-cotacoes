@@ -10,15 +10,10 @@ import yfinance
 from winotify import Notification
 
 class App:
-
-    
-
-   
-
-    def __init__(self):
+    def ini(self):
         on = True
         hj = date.today()
-        close = datetime(hj.year,hj.month,hj.day,12,30,0)#18
+        close = datetime(hj.year,hj.month,hj.day,18,00,0)#18
         f = open('config.json')
         config = json.load(f)
 
@@ -28,17 +23,15 @@ class App:
             print("iniciando")
             alert = Notification(app_id="Gecko", title="O app está iniciando...",duration="short")
             alert.show()
-            print(type(close))
-            print(type(datetime.now()))
+
+            #Mantem o script em execução até as 18 horas
             while on:
                 if (datetime.now() <= close):
-                    self.teste()
-                    time.sleep(30*60)#(config["intervalo"]*60)
+                    self.teste(config, hj,(str(config["intervalo"])+'m'))
+                    time.sleep(config["intervalo"]*60)
                 else:
                     alert = Notification(app_id="Gecko", title="O app está encerrando...", msg="A bolsa encerrou o dia 18h"+str(datetime.now),duration="short")
                     on = False
-    
-
     
             alert.show()
         except Exception as e:
@@ -49,18 +42,17 @@ class App:
 
     pass
     
-    def teste(self):
-        print(str(self.config["intervalo"])+'m')
+    def teste(conf, dia, intervalo):
+        print(str(conf["intervalo"])+'m')
     
-        for i in self.config["acoes"]:
+        #Baixa dados de cada ação e salva em data.json
+        for i in conf["acoes"]:
             print(i)
-            data = yfinance.download(i,period='1d', interval=('30m'))#str(config["intervalo"])+'m'
+            data = yfinance.download(i,period='1d', interval=intervalo)
             dataJson = data.to_json()
             print(dataJson)
-        ##ff = open("ndata.json",'w')
-        ##ff.write(dataJson)
-        ##ff.close()
-        ##Coonstruindo estrutura para salvar em data.json
+       
+            ##Construindo estrutura para salvar em data.json com dados extraidos do yfinance
             dailyData = {
                 "Adj Close": data["Adj Close"].iloc[-1],
                 "Open": data["Open"].iloc[0],
@@ -68,8 +60,8 @@ class App:
                 "Low" : data["Low"].min(),
                 "Close" : data["Close"].iloc[-1]
                 }
-        
-        ##"""print(data)
+
+            #Carrega dados já existentes da ação
             with open('static/data.json') as fileData:
                 file = fileData.read()
                 if file.strip:
@@ -79,15 +71,17 @@ class App:
                     print("Arquivo vazio")
                     newData = {}
         
+            #Inclui novos dados no json com os dados existentes
             if i not in newData:
-                newData[i] = {self.hj.strftime('%Y-%m-%d'): dailyData}
+                newData[i] = {dia.strftime('%Y-%m-%d'): dailyData}
             else:
-                if self.hj.strftime('%Y-%m-%d') not in newData[i]:
-                    newData[i][self.hj.strftime('%Y-%m-%d')] = dailyData
+                if dia.strftime('%Y-%m-%d') not in newData[i]:
+                    newData[i][dia.strftime('%Y-%m-%d')] = dailyData
                 else:
                     for key, value in dailyData.items():
-                        newData[i][self.hj.strftime('%Y-%m-%d')][key] = value
+                        newData[i][dia.strftime('%Y-%m-%d')][key] = value
         
+            #Escreve novos dados no arquivo
             with open('static/data.json','w') as file:
                 json.dump(newData,file)
 
@@ -96,4 +90,14 @@ class App:
         alert.show()
         pass
 
-
+    def tickerExiste(tick):
+        r = yfinance.Ticker(tick).info
+        if len(r) > 1:
+            return True
+        else:
+            return False
+        
+    def t():
+        while True:
+            print("Teste iniciar app")
+            time.sleep(60)
