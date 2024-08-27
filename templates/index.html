@@ -16,15 +16,27 @@
                 },
                 body: JSON.stringify({ valor: 'ok' })
             });
-            console.log("logg")
             const data = await response.json();
+        }
+
+        function showAlert() {
+            if (confirm("Você realmente deseja encerrar a aplicação? \nPara iniciar novamente basta executar o script de inicialização.")) {
+                fetch('/onOff', { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Servidor encerrado com sucesso.");
+                        } else {
+                            alert("Erro ao encerrar o servidor.");
+                        }
+                    });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
 
             const select = document.getElementById('onOff');
-            button.addEventListener('click', (event) => {
-                onOff();
+            select.addEventListener('click', (event) => {
+                showAlert();
             });
         });
     </script>
@@ -61,7 +73,7 @@
         </div>
         <div class="sessao2">
             <ul>
-                <li><a href="">Suas ações</a></li>
+                <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
                 <li><a href="">Notificações</a></li>
                 <li><a href="">Configurações</a></li>

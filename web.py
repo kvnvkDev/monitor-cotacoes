@@ -11,7 +11,7 @@ from app import *
 
 
 
-with open('static/data.json') as fileData:
+"""with open('static/data.json') as fileData:
       file = fileData.read()
       if file.strip:
             newData = json.loads(file)
@@ -19,7 +19,7 @@ with open('static/data.json') as fileData:
 
 with open('config.json') as fileConfig:
             config = fileConfig.read()
-            conf = json.loads(config)
+            conf = json.loads(config)"""
 
 
 web = Flask(__name__)
@@ -33,11 +33,19 @@ def gerarGrafico():
     ##Gera o gráfico com o historico da ação selecionada
     y=[]
     x=[]
-    for key, value in newData[valor].items():
+    for key, value in App.newData[valor].items():
           #x.insert(0,key)
           x.append(key)
           y.append(value["Adj Close"])
   
+      #pega os ultivos 5 valores
+    x = x[-5:]
+    y = y[-5:]
+
+      # Pegando os valores  de 5 em 5
+      #x = x[::-5][:5]
+      #y = y[::-5][:5]
+
     plt.figure()
     plt.plot(x,y)
 
@@ -62,35 +70,35 @@ def index():
 
 @web.route('/listaAcoes', methods=['GET'])
 def listaAcoes():
-      listaTicker = conf["acoes"]
+      listaTicker = App.config["acoes"]
       return render_template('listaAcoes.html', status = "", tickers = listaTicker)
 
 @web.route('/deleteAcoes/<string:ticker>', methods=['POST'])
 def deleteAcoes(ticker):
       print(ticker)
             
-      conf["acoes"].remove(ticker)
-      listaTicker = conf["acoes"]
+      App.config["acoes"].remove(ticker)
+      listaTicker = App.config["acoes"]
 
       #atualiza arquivo config.json
       with open('config.json','w') as config:
-            json.dump(conf,config)
+            json.dump(App.config,config)
             print("Arquivo atualizado")
       return render_template('listaAcoes.html',status = "" ,tickers = listaTicker)
 
 @web.route('/addAcoes', methods=['POST'])
 def addAcoes():
       ticker = request.form['ticker']
-      listaTicker = conf["acoes"]
+      listaTicker = App.config["acoes"]
 
       if App.tickerExiste(ticker):
-            conf["acoes"].append(ticker)
-            print(conf)
-            App.config = conf
-            listaTicker = conf["acoes"]
+            App.config["acoes"].append(ticker)
+            #print(conf)
+            #App.config = conf
+            listaTicker = App.config["acoes"]
             #atualiza arquivo config.json
             with open('config.json','w') as config:
-                  json.dump(conf,config)
+                  json.dump(App.config,config)
                   print("Arquivo atualizado")
             retorno = "Ticker " + ticker + " adicionado."
             return render_template('listaAcoes.html',status = retorno, tickers=listaTicker)
@@ -107,13 +115,12 @@ def historico():
 
 @web.route('/onOff', methods=['POST'])
 def onOff():
-      App.on = False
       print("Fechando app")
       os._exit(0)
       return render_template('index.html')
 
 if __name__ == '__main__':
-      app = App()
+      #app = App()
       web.run(threaded=True)
       print("run")
       

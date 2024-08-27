@@ -10,12 +10,26 @@ import yfinance
 from winotify import Notification
 
 class App:
+    config = {}
+    newData = {}
     def ini(self):
         on = True
         hj = date.today()
         close = datetime(hj.year,hj.month,hj.day,18,00,0)#18
+
+         #Carrega dados já existentes
         f = open('config.json')
-        config = json.load(f)
+        self.config = json.load(f)
+
+        with open('static/data.json') as fileData:
+            file = fileData.read()
+            if file.strip:
+                self.newData = json.loads(file)
+                print("Arquivo carregado")
+            else:
+                print("Arquivo vazio")
+                
+
 
         print(hj) 
         
@@ -27,8 +41,8 @@ class App:
             #Mantem o script em execução até as 18 horas
             while on:
                 if (datetime.now() <= close):
-                    self.teste(config, hj,(str(config["intervalo"])+'m'))
-                    time.sleep(config["intervalo"]*60)
+                    self.atualiza(self.config, self.newData, hj,(str(self.config["intervalo"])+'m'))
+                    time.sleep(self.config["intervalo"]*60)
                 else:
                     alert = Notification(app_id="Gecko", title="O app está encerrando...", msg="A bolsa encerrou o dia 18h"+str(datetime.now),duration="short")
                     on = False
@@ -42,7 +56,7 @@ class App:
 
     pass
     
-    def teste(conf, dia, intervalo):
+    def atualiza(conf,newData, dia, intervalo):
         print(str(conf["intervalo"])+'m')
     
         #Baixa dados de cada ação e salva em data.json
@@ -61,15 +75,7 @@ class App:
                 "Close" : data["Close"].iloc[-1]
                 }
 
-            #Carrega dados já existentes da ação
-            with open('static/data.json') as fileData:
-                file = fileData.read()
-                if file.strip:
-                    newData = json.loads(file)
-                    print("Arquivo carregado")
-                else:
-                    print("Arquivo vazio")
-                    newData = {}
+            
         
             #Inclui novos dados no json com os dados existentes
             if i not in newData:

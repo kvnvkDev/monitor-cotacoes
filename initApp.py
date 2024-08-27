@@ -6,9 +6,8 @@ import threading
 
 threadWeb = threading.Thread(target=web.run).start()
 app = App()
-thread = threading.Thread(target=App.ini(App))
+thread = threading.Thread(target=App.ini(App)).start()
       
-thread.start()
     
 exit()
 #notificação
