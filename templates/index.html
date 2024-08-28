@@ -6,19 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
-
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script>
-        async function onOff() {
-            const response = await fetch('/onOff', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ valor: 'ok' })
-            });
-            const data = await response.json();
-        }
-
         function showAlert() {
             if (confirm("Você realmente deseja encerrar a aplicação? \nPara iniciar novamente basta executar o script de inicialização.")) {
                 fetch('/onOff', { method: 'POST' })
@@ -43,7 +32,7 @@
 </head>
 
 <body>
-    <button id="onOff">on off</button> <h1>Monitor de ações</h1>
+    <button id="onOff">Desligar</button> <h1>Monitor de ações</h1>
     <div id="principal">
         <div class="sessao1">
             <h3>Atualizações</h3>
@@ -76,7 +65,7 @@
                 <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
                 <li><a href="">Notificações</a></li>
-                <li><a href="">Configurações</a></li>
+                <li><a href="configuracoes">Configurações</a></li>
                 <li><a href="">Sobre</a></li>
             </ul>
         </div>

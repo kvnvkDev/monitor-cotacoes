@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
-
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script>
-        // function submit(){
         window.addEventListener('DOMContentLoaded', function () {
             const tdElements = document.querySelectorAll('#tabela td');
 
@@ -24,30 +23,6 @@
                 });
             });
         });
-        /*  id =  document.querySelectorAll('#tabela td');
-          id.forEach( linha => {linha.addEventListener('click', function(event){
-           const link= event.target.closest('tr');
-           const idLink = link.id;
-           console.log(idLink);
-           alert(idLink);
-          });
-       });
-          /*id.forEach(function(td){
-               td.addEventListener("click", function(event){
-                   alert(event.id)
-                   console.log(event.id)
-               })
-           });
-           console.log(id)
-           let req = new XMLHttpRequest()
-           req.open("POST" , "deleteAcoes/" + this.id, true)
-           req.setRequestHeader("Content-Type","application/json")
-           req.send(this.id)
-       }
-
-       document.addEventListener('submit', (event) => {
-*/
-        //   }
     </script>
 </head>
 
@@ -95,7 +70,7 @@
                 <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
                 <li><a href="">Notificações</a></li>
-                <li><a href="">Configurações</a></li>
+                <li><a href="configuracoes">Configurações</a></li>
                 <li><a href="">Sobre</a></li>
             </ul>
         </div>

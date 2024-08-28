@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script>
+        
+    </script>
+</head>
+
+<body>
+    <a href="/">
+        <h1>Monitor de ações</h1>
+    </a>
+    <div id="principal">
+        <div class="sessao1">
+            <form id="formConf" action="configuracoes" method="post">
+                {% if conf != "": %}
+                <label>E-mail: </label>
+                <input type="text" name="email" value="{{conf[0]}}"><br><br>
+                <label>Ativar Notificações por email: </label>
+                <input type="checkbox" name="notificacao" {% if conf[1] %} checked{% endif %}><br><br>
+                <label>Intervalo: </label>
+                <select name="intervalo" id="intervalo">
+                    <option value="10" {% if conf[2] == 10 %}selected{% endif %}>10</option>
+                    <option value="30" {% if conf[2] == 30 %}selected{% endif %}>30</option>
+                    <option value="60" {% if conf[2] == 60 %}selected{% endif %}>60</option>
+                    <option value="120" {% if conf[2] == 120 %}selected{% endif %}>120</option>
+                </select>
+                {% endif %}
+                <br><br><br><input type="submit" value="Salvar">
+            </form>
+        </div>
+        <div class="sessao2">
+            <ul>
+                <li><a href="listaAcoes">Suas ações</a></li>
+                <li><a href="historico">Histórico</a></li>
+                <li><a href="">Notificações</a></li>
+                <li><a href="configuracoes">Configurações</a></li>
+                <li><a href="">Sobre</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

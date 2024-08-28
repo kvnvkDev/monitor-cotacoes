@@ -108,6 +108,28 @@ def addAcoes():
             return render_template('listaAcoes.html',status = retorno, tickers=listaTicker)
 
 
+@web.route('/configuracoes', methods=['GET'])
+def configuracoes():
+      email = App.config['email']
+      notificacao = App.config['notificacao']
+      intervalo = App.config['intervalo']
+      return render_template('configuracoes.html', conf = [email, notificacao, intervalo])
+
+
+@web.route('/configuracoes', methods=['POST'])
+def salvaConfiguracoes():
+      email = request.form['email']
+      notif = request.form.get('notificacao')
+      
+      App.config['email'] = email
+      App.config['notificacao'] = True if notif == 'on' else False
+      App.config['intervalo'] = request.form['intervalo']
+
+      with open('config.json','w') as config:
+                  json.dump(App.config,config)
+                  print("Arquivo atualizado")
+      return configuracoes()
+
 @web.route('/historico', methods=['GET'])
 def historico():
       return render_template('historico.html')
@@ -123,5 +145,4 @@ if __name__ == '__main__':
       #app = App()
       web.run(threaded=True)
       print("run")
-      
       

@@ -53,9 +53,20 @@ h3{
 }
 
 #onOff{
-    padding: 15px;
-    background-color: red;
+    position: absolute;
+    top: 6px;
+    right: 15px;
+    padding: 10px;
+    border-radius: 30px;
     border: 2px solid rebeccapurple;
+    
+}
+#onOff:hover{
+    background-color: rgb(255, 148, 148);
+    box-shadow: 1px 1px 5px 1px var(--bg-shadow);
+}
+#onOff:active{
+    background-color: red;
 }
 select{
     padding: 2px;
@@ -68,6 +79,8 @@ select{
 }
 form{
     margin-bottom: 12px ;
+}
+#formConf{
 }
 input{
     padding: 4px;

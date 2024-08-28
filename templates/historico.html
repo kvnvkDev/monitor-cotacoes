@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
-
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script>
         
         async function preencherSelect() {
@@ -14,7 +14,6 @@
             const dados = await response.json();
 
             const select = document.getElementById('acoes');
-           // console.log(dados);
             var keys = Object.keys(dados);
             console.log(typeof keys)
             
@@ -51,8 +50,6 @@
                 enviarValor(valor);
             });
         });
-
-
     </script>
 </head>
 
@@ -75,7 +72,7 @@
                 <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
                 <li><a href="">Notificações</a></li>
-                <li><a href="">Configurações</a></li>
+                <li><a href="configuracoes">Configurações</a></li>
                 <li><a href="">Sobre</a></li>
             </ul>
         </div>
