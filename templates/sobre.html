@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <a href="/">
+        <h1>Monitor de ações</h1>
+    </a>
+    <div id="principal">
+        <div class="sessao1">
+            <h3>Sobre</h3>
+            <div id="sobre">
+                <img src="{{ url_for('static', filename='favicon.ico') }}">
+                <p>Esta é uma aplicação web em Python para monitorar o preço de ativos na bolsa de valores.
+                    Possui um script que roda em segundo plano capturando os dados da biblioteca yfinance e
+                    armazena alguns dados para histórico de preços. E também possui uma interface web com
+                    back-end Flask que permite ver os dados a medida que são baixados com gráficos gerados
+                    pela biblioteca matplotlib.<br><br>
+                    O arquivo initApp.py é o que inicializa a aplicação. O usuário pode agendar uma tarefa
+                    no sistema operacional para iniciar a execução desse arquivo todos os dias ou sempre
+                    que iniciar o sistema. O arquivo app.py é o script que captura os dados do yfinance e
+                    manipula o arquivo de dados. O arquivo web.py é o back-end Flask que executa as funções
+                    presentes na interface web.
+                    <br>
+                    No arquivo data.json é armazenado os dados extraídos de cada ticker pelo yfinance de forma
+                    que torna possível o usuário ver o histórico de preços de dias anteriores. O arquivo config.json
+                    contem as opções de configuração do usuário e os tickers que ele escolhe monitorar.
+                    <br><br>
+                    Este aplicativo usa dados extraídos do yfinance. O nome dos tickers adicionados devem
+                    seguir a nomenclatura do Yahoo Finance.
+                    Os tickers usados neste repositório são apenas como exemplo e não são uma recomendação de investimento.
+                </p>
+            </div>
+            <p>Desenvolvido por <a href="https://github.com/kvnvkDev">kvnvkDev</a></p>
+        </div>
+        <div class="sessao2">
+            <ul>
+                <li><a href="listaAcoes">Suas ações</a></li>
+                <li><a href="historico">Histórico</a></li>
+                <li><a href="configuracoes">Configurações</a></li>
+                <li><a href="sobre">Sobre</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

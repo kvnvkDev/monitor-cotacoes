@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +9,6 @@
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             const tdElements = document.querySelectorAll('#tabela td');
-
             tdElements.forEach(td => {
                 td.addEventListener('mousedown', function (event) {
                     const idLink = event.target.id;
@@ -53,7 +51,6 @@
                         <th>Controle</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {% for item in tickers %}
                     <tr>
@@ -63,18 +60,15 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <p>...</p>
         </div>
         <div class="sessao2">
             <ul>
                 <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
-                <li><a href="">Notificações</a></li>
                 <li><a href="configuracoes">Configurações</a></li>
-                <li><a href="">Sobre</a></li>
+                <li><a href="sobre">Sobre</a></li>
             </ul>
         </div>
     </div>
 </body>
-
 </html>

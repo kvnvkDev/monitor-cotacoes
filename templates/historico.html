@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script>
-        
         async function preencherSelect() {
-            const response = await fetch("{{ url_for('static',filename='data.json') }}" );//'../data.json');
+            const response = await fetch("{{ url_for('static',filename='data.json') }}" );
             const dados = await response.json();
 
             const select = document.getElementById('acoes');
@@ -23,9 +21,7 @@
                 option.text = keys[i];
                 select.appendChild(option);
             }
-            
         }
-
         // Envia o valor seleciona para gera o gráfico
         async function enviarValor(valor) {
             console.log(valor)
@@ -43,7 +39,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             preencherSelect();
-
             const select = document.getElementById('acoes');
             select.addEventListener('change', (event) => {
                 const valor = event.target.value;
@@ -60,23 +55,19 @@
             <h3>Histórico</h3>
             <div>
                 <label for="acoes">Selecione a ação</label>
-
                 <select name="acoes" id="acoes">
                 </select>
             </div>
             <img id="grafico" src="" alt="Gráfico">
-            <p>...</p>
         </div>
         <div class="sessao2">
             <ul>
                 <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
-                <li><a href="">Notificações</a></li>
                 <li><a href="configuracoes">Configurações</a></li>
-                <li><a href="">Sobre</a></li>
+                <li><a href="sobre">Sobre</a></li>
             </ul>
         </div>
     </div>
 </body>
-
 </html>
