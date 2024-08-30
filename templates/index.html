@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +19,6 @@
                     });
             }
         }
-
         document.addEventListener('DOMContentLoaded', () => {
 
             const select = document.getElementById('onOff');
@@ -35,41 +33,27 @@
     <button id="onOff">Desligar</button> <h1>Monitor de ações</h1>
     <div id="principal">
         <div class="sessao1">
-            <h3>Atualizações</h3>
+            <h3>Atualizações - {{info}}</h3>
             <div class="divBloco">
+                {% for key, value in dados.items():%}
                 <div class="blocoAcao">
-                    <h5>TGAR11.SA</h5>
-                    <p>02/08/2024 - 10:30:00 - R$ 120,90</p>
+                    <h5>{{key.upper()}}</h5>
+                    <p><b>R${{value[0]}}</b> - Volume: {{value[3]}}</p>
+                    <p>Max: R${{value[1]}} - Min: R${{value[2]}}</p>
                     <p>Grafico</p>
+                    <img src="data:image/png;base64,{{value[4]}}" class="graf" alt="Gráfico de {{ key }}">
                 </div>
-                <div class="blocoAcao">
-                    <h5>MXRF11.SA</h5>
-                    <p>02/08/2024 - 10:30:00 - R$ 12,90</p>
-                    <p>Grafico</p>
-                </div>
-                <div class="blocoAcao">
-                    <h5>MXRF11.SA</h5>
-                    <p>02/08/2024 - 10:30:00 - R$ 12,90</p>
-                    <p>Grafico</p>
-                </div>
-                <div class="blocoAcao">
-                    <h5>MXRF11.SA</h5>
-                    <p>02/08/2024 - 10:30:00 - R$ 12,90</p>
-                    <p>Grafico</p>
-                </div>
+                {% endfor %}
             </div>
-            <p>...</p>
         </div>
         <div class="sessao2">
             <ul>
                 <li><a href="listaAcoes">Suas ações</a></li>
                 <li><a href="historico">Histórico</a></li>
-                <li><a href="">Notificações</a></li>
                 <li><a href="configuracoes">Configurações</a></li>
-                <li><a href="">Sobre</a></li>
+                <li><a href="sobre">Sobre</a></li>
             </ul>
         </div>
     </div>
 </body>
-
 </html>

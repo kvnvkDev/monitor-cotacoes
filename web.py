@@ -1,8 +1,8 @@
 import io
 import base64
 import json
-
 import os
+from datetime import datetime
 
 from flask import Flask, request, jsonify, render_template
 import matplotlib.pyplot as plt
@@ -26,25 +26,27 @@ web = Flask(__name__)
 
 @web.route('/gerarGrafico', methods=['POST'])
 def gerarGrafico():
-    
+    ##Gera o gráfico com o historico da ação selecionada
     data = request.json
     valor = data['valor']
 
-    ##Gera o gráfico com o historico da ação selecionada
     y=[]
     x=[]
     for key, value in App.newData[valor].items():
-          #x.insert(0,key)
           x.append(key)
           y.append(value["Adj Close"])
   
       #pega os ultivos 5 valores
-    x = x[-5:]
-    y = y[-5:]
-
-      # Pegando os valores  de 5 em 5
-      #x = x[::-5][:5]
-      #y = y[::-5][:5]
+    
+    if len(x) < 10:
+      x = x[-5:]
+      y = y[-5:]
+    elif len(x) > 10:# and len(x) < 25:
+      x = x[::-5][:2]
+      y = y[::-5][:2]
+    """elif len(x) > 25:
+      x = x[::-5][:5]
+      y = y[::-5][:5]"""
 
     plt.figure()
     plt.plot(x,y)
@@ -66,7 +68,40 @@ def gerarGrafico():
 
 @web.route('/', methods=['GET'])
 def index():
-      return render_template('index.html')
+      ##Gera o gráfico com dados do dia de cada ticker do usuário 
+      arr = {}
+      dt = datetime.today().strftime('%d-%m-%Y - %H:%M:%S')
+      #print(datetime.today().strftime('%Y-%m-%d - %H:%M:%S'))
+      print(App.dataFrame)
+      if not App.dataFrame.empty:
+            for key, value in App.dataFrame.groupby(level="Ticker"):
+                  x = []
+                  y = []
+                  
+                  # monta um dicionario com elementos de cada ticker para mostrar na tela principal [ultimo adj close, maior valor, menor valor, volume de negociação]
+                  arr[key] = ["{:.2f}".format(value["Adj Close"].iloc[-1]), "{:.2f}".format(value["High"].max()), "{:.2f}".format(value["Low"].min()), value["Volume"].iloc[-1]]
+                  for date, row in value.iterrows():
+                        x.append(datetime.strftime(date[1], '%H:%M:%S'))
+                        y.append(row["Adj Close"])
+                  plt.figure()
+                  plt.plot(x,y)
+                  #Adicione os valores de y em cada ponto
+                  for i, j in zip(x, y):
+                        plt.text(i, j, f'{j:.2f}', ha='center', va='bottom')
+
+                  plt.title(f'Gráfico para o valor {key}')
+                  # Salvar o gráfico em um buffer
+                  buf = io.BytesIO()
+                  plt.savefig(buf, format='png')
+                  buf.seek(0)
+                  image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                  buf.close()
+                  #print(arr)
+
+                  # adiciona a imagem em base64 no dicionário
+                  arr[key].append(image_base64)
+
+      return render_template('index.html', dados = arr, info = dt)
 
 @web.route('/listaAcoes', methods=['GET'])
 def listaAcoes():
@@ -76,7 +111,6 @@ def listaAcoes():
 @web.route('/deleteAcoes/<string:ticker>', methods=['POST'])
 def deleteAcoes(ticker):
       print(ticker)
-            
       App.config["acoes"].remove(ticker)
       listaTicker = App.config["acoes"]
 
@@ -93,8 +127,7 @@ def addAcoes():
 
       if App.tickerExiste(ticker):
             App.config["acoes"].append(ticker)
-            #print(conf)
-            #App.config = conf
+            
             listaTicker = App.config["acoes"]
             #atualiza arquivo config.json
             with open('config.json','w') as config:
@@ -118,13 +151,14 @@ def configuracoes():
 
 @web.route('/configuracoes', methods=['POST'])
 def salvaConfiguracoes():
-      email = request.form['email']
+      #email = request.form['email']
       notif = request.form.get('notificacao')
       
-      App.config['email'] = email
+      #App.config['email'] = email
       App.config['notificacao'] = True if notif == 'on' else False
       App.config['intervalo'] = request.form['intervalo']
 
+      #atualiza arquivo config.json
       with open('config.json','w') as config:
                   json.dump(App.config,config)
                   print("Arquivo atualizado")
@@ -134,6 +168,9 @@ def salvaConfiguracoes():
 def historico():
       return render_template('historico.html')
 
+@web.route('/sobre', methods=['GET'])
+def sobre():
+      return render_template('sobre.html')
 
 @web.route('/onOff', methods=['POST'])
 def onOff():

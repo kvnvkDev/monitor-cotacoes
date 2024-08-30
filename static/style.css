@@ -48,8 +48,13 @@ h3{
     grid-template-columns: 25vw 25vw 25vw;
 }
 .blocoAcao{
-    height: 35vh;
-    min-height: 270px;
+    min-height: 23vw;
+}
+.graf{
+    width: 99%;
+}
+#grafico{
+    max-width: 100%;
 }
 
 #onOff{
@@ -80,8 +85,6 @@ select{
 form{
     margin-bottom: 12px ;
 }
-#formConf{
-}
 input{
     padding: 4px;
 }
@@ -102,9 +105,24 @@ input{
     font-size: 11pt;
     font-weight: bold;
 }
+#sobre{
+    display: flex;
+}
+#sobre img{
+    width: 100px;
+    height: 100px;
+    padding: 22px;
+}
+#sobre p{
+    line-height: 13pt
+}
 @media(max-width: 1250px){
     .divBloco{
         grid-template-columns: 37vw 37vw;
+    }
+    .blocoAcao{
+        height: 50vh;
+        min-height: 400px;
     }
 }
 @media(max-width: 1050px){
@@ -121,9 +139,15 @@ input{
     .divBloco{
         grid-template-columns: 37vw 37vw;
     }
+    .blocoAcao{
+        min-height: 35vw;
+    }
 }
 @media(max-width:900px){
     .divBloco{
         grid-template-columns: 75vw;
+    }
+    .blocoAcao{
+        min-height: 70vw;
     }
 }
