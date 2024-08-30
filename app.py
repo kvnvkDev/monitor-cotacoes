@@ -15,7 +15,7 @@ def timestamp_to_date(timestamp):
 class App:
     config = {}
     newData = {}
-    dataFrame = {}
+    dataFrame = pd.DataFrame()
     hj = date.today()
     sys = os.name
     def ini(self):
