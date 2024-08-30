@@ -10,4 +10,3 @@ thread = threading.Thread(target=App.ini(App)).start()
       
     
 exit()
-#notificação
