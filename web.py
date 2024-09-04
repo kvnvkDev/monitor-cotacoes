@@ -156,7 +156,7 @@ def salvaConfiguracoes():
       
       #App.config['email'] = email
       App.config['notificacao'] = True if notif == 'on' else False
-      App.config['intervalo'] = request.form['intervalo']
+      App.config['intervalo'] = int(request.form['intervalo'])
 
       #atualiza arquivo config.json
       with open('config.json','w') as config:
