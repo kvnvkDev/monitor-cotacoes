@@ -4,6 +4,9 @@ Esta é uma aplicação web em Python para monitorar o preço de ativos na bolsa
 
 A aplicação permite configurar o período de tempo que os dados serão baixados e exibe uma notificação no sistema para informar o usuário. É possivel adicionar ou remover tickers conforme a prefêrencia do usuário. As páginas web possui design responsivo, se adaptando a diferentes tamanhos de telas.
 
+![image](static/Captura.PNG)
+![image](static/Captura_2.PNG)
+
 ## Tecnologias utilizadas
 - Python 3.11
 - HTML
@@ -14,6 +17,7 @@ A aplicação permite configurar o período de tempo que os dados serão baixado
 - flask 3.0.3
 - yfinance
 - matplotlib
+- pandas
 - winotify
 
 
@@ -25,7 +29,7 @@ Para começar é preciso ter o python e as dependências do projeto instalados.
 
 Instalar dependências: 
 
-` pip install flask yfinance matplotlib winotify `
+` pip install flask yfinance matplotlib pandas winotify `
 
 Use o comando abaixo para clonar o repositório
 
