@@ -52,7 +52,7 @@ class App:
             #Mantem o script em execução até as 18 horas
             while on:
                 if (datetime.now() <= close):
-                    self.atualiza(self.config, self.newData, self.hj,(str(self.config["intervalo"])+'m'))
+                    self.atualiza(self.config, self.hj,(str(self.config["intervalo"])+'m'))
                     time.sleep(self.config["intervalo"]*60)
                 else:
                     if App.sys == "nt":
@@ -69,7 +69,7 @@ class App:
 
     pass
     
-    def atualiza(conf,newData, dia, intervalo):
+    def atualiza(conf, dia, intervalo):
         dataF = {}
         #Baixa dados de cada ação e salva em data.json
         for i in conf["acoes"]:
@@ -93,18 +93,18 @@ class App:
                 dataF[i] = data
             
                 #Inclui novos dados no json com os dados existentes
-                if i not in newData:
-                    newData[i] = {dia.strftime('%Y-%m-%d'): dailyData}
+                if i not in App.newData:
+                    App.newData[i] = {dia.strftime('%Y-%m-%d'): dailyData}
                 else:
-                    if dia.strftime('%Y-%m-%d') not in newData[i]:
-                        newData[i][dia.strftime('%Y-%m-%d')] = dailyData
+                    if dia.strftime('%Y-%m-%d') not in App.newData[i]:
+                        App.newData[i][dia.strftime('%Y-%m-%d')] = dailyData
                     else:
                         for key, value in dailyData.items():
-                            newData[i][dia.strftime('%Y-%m-%d')][key] = value
+                            App.newData[i][dia.strftime('%Y-%m-%d')][key] = value
         
                 #Escreve novos dados no arquivo
                 with open('static/data.json','w') as file:
-                    json.dump(newData,file)
+                    json.dump(App.newData,file)
             # Concatenar os DataFrames do dicionário em um novo DataFrame
             App.dataFrame = pd.concat(dataF.values(), keys=dataF.keys(), names=['Ticker', 'Datetime'])
             #print(App.dataFrame)
