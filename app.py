@@ -6,7 +6,10 @@ from datetime import date,datetime
 import os
 
 import yfinance
-from winotify import Notification
+if os.name == "nt":
+    print("nt")
+    from winotify import Notification
+
 import pandas as pd
 
 def timestamp_to_date(timestamp):
