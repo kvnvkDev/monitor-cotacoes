@@ -23,14 +23,14 @@
             }
         }
         // Envia o valor seleciona para gera o gráfico
-        async function enviarValor(valor) {
+        async function enviarValor(valor, per) {
             console.log(valor)
             const response = await fetch('/gerarGrafico', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ valor: valor })
+                body: JSON.stringify({ valor: valor, period: per })
             });
             const data = await response.json();
             const img = document.getElementById('grafico');
@@ -40,9 +40,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             preencherSelect();
             const select = document.getElementById('acoes');
+            const period = document.getElementById('period');
+            console.log(period)
             select.addEventListener('change', (event) => {
                 const valor = event.target.value;
-                enviarValor(valor);
+                enviarValor(valor, period.value);
+            });
+            period.addEventListener('change', (event) => {
+                const valor = event.target.value;
+                enviarValor(select.value, valor);
             });
         });
     </script>
@@ -56,6 +62,13 @@
             <div>
                 <label for="acoes">Selecione a ação</label>
                 <select name="acoes" id="acoes">
+                </select>
+                <label for="period">Selecione o período de busca</label>
+                <select name="period" id="period">
+                    <option value="5d">7 dias</option>
+                    <option value="1mo">1 mês</option>
+                    <option value="6mo">6 meses</option>
+                    <option value="1y">1 ano</option>
                 </select>
             </div>
             <img id="grafico" src="" alt="Gráfico">

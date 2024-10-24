@@ -28,29 +28,44 @@ web = Flask(__name__)
 def gerarGrafico():
     ##Gera o gráfico com o historico da ação selecionada
     data = request.json
+    print(data)
     valor = data['valor']
+    period = data['period']
+
+    down = yfinance.download(valor,period=period)
+
 
     y=[]
     x=[]
-    for key, value in App.newData[valor].items():
-          x.append(key)
-          y.append(value["Adj Close"])
-  
-      #pega os ultivos 5 valores
-    
-    if len(x) < 10:
-      x = x[-5:]
-      y = y[-5:]
-    elif len(x) > 10:# and len(x) < 25:
-      x = x[::-5][:2]
-      y = y[::-5][:2]
-    """elif len(x) > 25:
-      x = x[::-5][:5]
-      y = y[::-5][:5]"""
+    if not down.empty:
+        #down.index = down.index.strftime('%d-%m')
+        # Remover finais de semana
+        down = down[down.index.dayofweek < 5]
+        
+        if len(down) < 10:
+          # Reamostrar os dados para selecionar valores de 1 em 1 dias
+          down_resampled = down.resample('1D').last()
+          # Limitar os dados a no máximo 10 pontos
+          down_limited = down_resampled.tail(10)
+        elif len(down) > 10 and len(down) < 40:
+          # Reamostrar os dados para selecionar valores de 5 em 5 dias
+          down_resampled = down.resample('5D').last()
+          # Limitar os dados a no máximo 30 pontos
+          down_limited = down_resampled.tail(25)
+        elif len(down) > 40:
+          # Reamostrar os dados para selecionar valores de 5 em 5 dias
+          down_resampled = down.resample('5D').last()
+          # Limitar os dados a no máximo 50 pontos
+          down_limited = down_resampled.tail(45)
 
-    plt.figure()
+    x = down_limited.index.strftime('%d-%m')
+    y = down_limited['Adj Close'].round(2)
+    
+    plt.figure().set_figwidth(18)
     plt.plot(x,y)
 
+    plt.xticks(rotation=45)
+    plt.grid(True)
     #Adicione os valores de y em cada ponto
     for i, j in zip(x, y):
       plt.text(i, j, f'{j:.2f}', ha='center', va='bottom')
@@ -81,7 +96,7 @@ def index():
                   # monta um dicionario com elementos de cada ticker para mostrar na tela principal [ultimo adj close, maior valor, menor valor, volume de negociação]
                   arr[key] = ["{:.2f}".format(value["Adj Close"].iloc[-1]), "{:.2f}".format(value["High"].max()), "{:.2f}".format(value["Low"].min()), value["Volume"].iloc[-1]]
                   for date, row in value.iterrows():
-                        x.append(datetime.strftime(date[1], '%H:%M:%S'))
+                        x.append(datetime.strftime(date[1], '%H:%M'))
                         y.append(row["Adj Close"])
                   plt.figure()
                   plt.plot(x,y)
@@ -180,6 +195,6 @@ def onOff():
 
 if __name__ == '__main__':
       #app = App()
-      web.run(threaded=True)
+      web.run(threaded=True, host="0.0.0.0", port=5000)
       print("run")
       
