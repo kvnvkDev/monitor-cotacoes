@@ -2,12 +2,13 @@ import io
 import base64
 import json
 import os
-from datetime import datetime
+from datetime import date,datetime
 
 from flask import Flask, request, jsonify, render_template
 import matplotlib.pyplot as plt
 
 from app import *
+import util
 
 
 
@@ -24,16 +25,34 @@ with open('config.json') as fileConfig:
 
 web = Flask(__name__)
 
+def imagemBuffer(plt):
+     # Salvar o gráfico em um buffer
+     buf = io.BytesIO()
+     plt.savefig(buf, format='png')
+     buf.seek(0)
+     image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+     buf.close()
+     return image_base64
+
 @web.route('/gerarGrafico', methods=['POST'])
 def gerarGrafico():
     ##Gera o gráfico com o historico da ação selecionada
     data = request.json
     print(data)
-    valor = data['valor']
+    tick = data['valor']
     period = data['period']
 
-    down = yfinance.download(valor,period=period)
+    cache_path = util.load_plot_cache(tick, period, date.today())
+    print(cache_path)
+    if cache_path:
+         #print(cache_path)
+         with open(cache_path, "rb") as image_file:
+            image_data = image_file.read()
+         
+         return jsonify({'image':base64.b64encode(image_data).decode('utf-8')})
 
+    #print("download") 
+    down = yfinance.download(tick,period=period)
 
     y=[]
     x=[]
@@ -63,23 +82,15 @@ def gerarGrafico():
     
     plt.figure().set_figwidth(18)
     plt.plot(x,y)
-
     plt.xticks(rotation=45)
     plt.grid(True)
     #Adicione os valores de y em cada ponto
     for i, j in zip(x, y):
       plt.text(i, j, f'{j:.2f}', ha='center', va='bottom')
 
-    plt.title(f'Gráfico para o valor {valor}')
-
-    # Salvar o gráfico em um buffer
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
-    buf.close()
-
-    return jsonify({'image': image_base64})
+    plt.title(f'Gráfico para o valor {tick}')
+    util.save_plot_cache(tick,period,plt, date.today())
+    return jsonify({'image': imagemBuffer(plt)})
 
 @web.route('/', methods=['GET'])
 def index():
@@ -105,16 +116,9 @@ def index():
                         plt.text(i, j, f'{j:.2f}', ha='center', va='bottom')
 
                   plt.title(f'Gráfico para o valor {key}')
-                  # Salvar o gráfico em um buffer
-                  buf = io.BytesIO()
-                  plt.savefig(buf, format='png')
-                  buf.seek(0)
-                  image_base64 = base64.b64encode(buf.read()).decode('utf-8')
-                  buf.close()
-                  #print(arr)
 
                   # adiciona a imagem em base64 no dicionário
-                  arr[key].append(image_base64)
+                  arr[key].append(imagemBuffer(plt))
 
       return render_template('index.html', dados = arr, info = dt)
 
@@ -189,6 +193,8 @@ def sobre():
 
 @web.route('/onOff', methods=['POST'])
 def onOff():
+      print("Limpando cache")
+      util.limpar_pasta_cache()
       print("Fechando app")
       os._exit(0)
       return render_template('index.html')
